@@ -1,0 +1,20 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-yaml
+        exclude: ^charts/.*/templates/
+      - id: check-json
+      - id: check-toml
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: 'v0.11.10'
+    hooks:
+      - id: ruff
+        args: [--fix]
+      - id: ruff-format
+      - id: ruff
+  - repo: https://github.com/google/yamlfmt
+    rev: "v0.16.0"
+    hooks:
+      - id: yamlfmt
+        exclude: ^charts/.*/templates/
