@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/exalsius/skypilot-sidecar/compare/v0.1.0...v0.2.0) (2025-09-09)
+
+
+### Features
+
+* push for release ([#5](https://github.com/exalsius/skypilot-sidecar/issues/5)) ([8e98815](https://github.com/exalsius/skypilot-sidecar/commit/8e98815871ec107e7d259d8c7994466d45939c45))
+
 ## 0.1.0 (2025-09-09)
 
 
