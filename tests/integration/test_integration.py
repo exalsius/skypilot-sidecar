@@ -9,13 +9,13 @@ from src.main import app
 
 # Set up test environment before importing the app
 TEST_DATA_PATH = Path(__file__).parent / "data"
-os.environ["EXLS_SKY_CATALOG_PATH"] = str(TEST_DATA_PATH)
 
 
 @pytest.fixture(autouse=True)
 def clean_environment():
     """Ensure each test starts with original environment state."""
     original_env = os.environ.copy()
+    os.environ["EXLS_SKY_CATALOG_PATH"] = str(TEST_DATA_PATH)
     yield
     # Restore original environment
     os.environ.clear()

@@ -11,10 +11,11 @@ from src.config import DEFAULT_SKY_CATALOG_PATH, AppConfig, config
 @pytest.fixture(autouse=True)
 def clean_environment():
     """Ensure each test starts with original environment state."""
-    os.environ.clear()
+    original_env = os.environ.copy()
     yield
     # Restore original environment
     os.environ.clear()
+    os.environ.update(original_env)
 
 
 class TestAppConfig:
