@@ -1,7 +1,7 @@
 # -----------------------------
 # Stage 1: Base build with uv
 # -----------------------------
-FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim AS builder
+FROM ghcr.io/astral-sh/uv:python3.13-alpine AS builder
 
 WORKDIR /app
 
@@ -9,11 +9,7 @@ WORKDIR /app
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    apt-get update && \
-    apt-get install -y --no-install-recommends git && \
-    uv sync --locked --no-install-project && \
-    apt-get purge -y --auto-remove git && \
-    rm -rf /var/lib/apt/lists/*
+    uv sync --locked --no-install-project
 
 COPY . .
 
@@ -23,7 +19,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 # -----------------------------
 # Stage 2: Run tests
 # -----------------------------
-FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim AS tester
+FROM ghcr.io/astral-sh/uv:python3.13-alpine AS tester
 
 WORKDIR /app
 
@@ -33,16 +29,11 @@ ENV PATH="/app/.venv/bin:$PATH"
 # -----------------------------
 # Stage 3: Final minimal service
 # -----------------------------
-FROM ghcr.io/astral-sh/uv:python3.13-bookworm-slim AS server
-
-# Create a non-root user
-RUN adduser --disabled-password --gecos "" appuser
+FROM ghcr.io/astral-sh/uv:python3.13-alpine AS server
 
 WORKDIR /app
 
 COPY --from=tester --chown=appuser:appuser /app /app
 ENV PATH="/app/.venv/bin:$PATH"
-
-USER appuser
 
 ENTRYPOINT ["/app/docker/entrypoint.sh"]

@@ -1,6 +1,7 @@
 import ast
 import json
 from enum import StrEnum
+import logging
 from pathlib import Path
 from typing import AsyncGenerator, Dict, List, Optional, Union, cast
 
@@ -65,7 +66,8 @@ class AppConfig(BaseSettings):
     @classmethod
     def validate_catalog_path(cls, v: Path) -> Path:
         if not v.exists():
-            raise ValueError(f"Catalog path {v} does not exist.")
+            logging.warning(f"Catalog path {v} does not exist. Creating it.")
+            v.mkdir(parents=True, exist_ok=True)
         if not v.is_dir():
             raise ValueError(f"Catalog path {v} is not a directory.")
         return v
@@ -334,7 +336,7 @@ async def list_instances_stream(
             yield json.dumps({gpu_type: items_as_dict}) + "\n"
 
 
-@router.get("/health")
+@app.get("/health")
 async def health():
     """Health check endpoint."""
     return {"status": "ok"}
