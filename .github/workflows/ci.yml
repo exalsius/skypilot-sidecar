@@ -23,7 +23,7 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v6
       - name: Install project dependencies
-        run: uv sync --all-extras --group dev --group test
+        run: uv sync --all-extras --all-groups
       - name: Check formatting with ruff
         run: uv run ruff format --check --diff .
       - name: Lint code with ruff
