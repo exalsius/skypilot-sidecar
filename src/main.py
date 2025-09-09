@@ -6,7 +6,7 @@ from typing import AsyncGenerator, Dict, List, Optional, Union, cast
 
 import pandas as pd
 import uvicorn
-from fastapi import FastAPI
+from fastapi import APIRouter, FastAPI
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field, field_validator
 from pydantic_settings import (
@@ -194,7 +194,7 @@ def _list_instances_impl(
     df["AcceleratorName"] = df["AcceleratorName"].fillna("CPU-ONLY")
 
     if gpus_only:
-        df = df[df["GpuInfo"].notna()]  # type: ignore
+        df = df.loc[:, df["GpuInfo"].notna()]
     df = df.copy()  # avoid column assignment warning
 
     # accelerator_count can be NaN, so we need to handle it.
@@ -211,36 +211,37 @@ def _list_instances_impl(
     except (ValueError, SyntaxError):
         df["DeviceMemoryGiB"] = None
 
-    df = df[  # type: ignore
+    df = df.loc[
+        :,
         [
             "InstanceType",
             "AcceleratorName",
             "AcceleratorCount",
             "vCPUs",
-            "DeviceMemoryGiB",  # device memory
-            "MemoryGiB",  # host memory
+            "DeviceMemoryGiB",
+            "MemoryGiB",
             "Price",
             "SpotPrice",
             "Region",
-        ]
+        ],
     ].drop_duplicates()
 
     if drop_instance_type_none:
-        df = df[df["InstanceType"].notna()]  # type: ignore
+        df = df.loc[df["InstanceType"].notna()]
 
     if name_filter is not None:
-        df = df[  # type: ignore
+        df = df.loc[
             df["AcceleratorName"].str.contains(
                 name_filter, case=case_sensitive, regex=True
-            )
+            ),
         ]
     if region_filter is not None:
-        df = df[  # type: ignore
+        df = df.loc[
             df["Region"].str.contains(region_filter, case=case_sensitive, regex=True)
         ]
     df["AcceleratorCount"] = df["AcceleratorCount"].astype(float)
     if quantity_filter is not None:
-        df = df[df["AcceleratorCount"] == quantity_filter]  # type: ignore
+        df = df.loc[df["AcceleratorCount"] == quantity_filter]
 
     grouped = df.groupby("AcceleratorName")
 
@@ -292,7 +293,9 @@ def _list_instances_impl(
     return {str(k): make_list_from_df(v) for k, v in grouped}
 
 
+config = AppConfig()
 app = FastAPI()
+router = APIRouter()
 
 
 async def list_instances_stream(
@@ -305,7 +308,6 @@ async def list_instances_stream(
     all_regions: bool = False,
     drop_instance_type_none: bool = True,
 ) -> AsyncGenerator[str, None]:
-    config: AppConfig = AppConfig()
     cloud_list: List[Cloud] = []
 
     if clouds is None:
@@ -330,17 +332,15 @@ async def list_instances_stream(
         for gpu_type, items in results.items():
             items_as_dict = [item.model_dump() for item in items]
             yield json.dumps({gpu_type: items_as_dict}) + "\n"
-            # for item in items:
-            #    yield json.dumps(item.model_dump()) + "\n"
 
 
-@app.get("/health")
+@router.get("/health")
 async def health():
     """Health check endpoint."""
     return {"status": "ok"}
 
 
-@app.post("/list-instances")
+@router.post("/list-instances")
 async def list_instances_endpoint(body: ListInstancesRequest) -> StreamingResponse:
     return StreamingResponse(
         list_instances_stream(
@@ -356,8 +356,10 @@ async def list_instances_endpoint(body: ListInstancesRequest) -> StreamingRespon
     )
 
 
+app.include_router(router, prefix=f"/v{config.api_version}")
+
+
 if __name__ == "__main__":
-    config: AppConfig = AppConfig()
     uvicorn.run(
         app,
         host=config.api_host,
