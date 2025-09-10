@@ -1,4 +1,4 @@
-<p align="center"><img src="./docs/img/logo_banner.png" alt="Skypilot Catalog API" width="500"></p>
+<p align="left"><img src="./docs/img/logo_banner.png" alt="Skypilot Catalog API" width="250"></p>
 
 # Skypilot Catalog API
 
