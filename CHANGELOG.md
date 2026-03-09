@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.3.0](https://github.com/exalsius/skypilot-sidecar/compare/v0.2.0...v0.3.0) (2026-03-09)
+
+
+### Features
+
+* update catalog version to align with skypilot 0.11.2 ([#10](https://github.com/exalsius/skypilot-sidecar/issues/10)) ([c638dea](https://github.com/exalsius/skypilot-sidecar/commit/c638deabd788e90dac0a19a2e49e93bbf36fdc83))
+
+
+### Documentation
+
+* added a readme with documentation and our banner ([#7](https://github.com/exalsius/skypilot-sidecar/issues/7)) ([195bfa4](https://github.com/exalsius/skypilot-sidecar/commit/195bfa4fabba9394b7a1f118d3c91b958ba601a6))
+* fixed banner ([#9](https://github.com/exalsius/skypilot-sidecar/issues/9)) ([a1d7195](https://github.com/exalsius/skypilot-sidecar/commit/a1d7195549af791ea29f50d43a2a27f4f6c82cd0))
+
 ## [0.2.0](https://github.com/exalsius/skypilot-sidecar/compare/v0.1.0...v0.2.0) (2025-09-09)
 
 
