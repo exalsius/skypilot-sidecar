@@ -55,7 +55,7 @@ Configuration is managed via environment variables with the prefix `EXLS_SKY_`.
 | --------------------------- | ----------------------------- | --------- | --------------------------------------------------------------------- |
 | `EXLS_SKY_API_HOST`         | `0.0.0.0` (string)            | No        | Host to run the API on. Defaults to `0.0.0.0`.                        |
 | `EXLS_SKY_API_PORT`         | `5555` (integer)              | No        | Port to run the API on. Defaults to `5555`.                           |
-| `EXLS_SKY_CATALOG_PATH`     | `~/.sky/catalogs/v7` (string) | No        | Path to the catalog root directory. Defaults to `~/.sky/catalogs/v7`. |
+| `EXLS_SKY_CATALOG_PATH`     | `~/.sky/catalogs/v8` (string) | No        | Path to the catalog root directory. Defaults to `~/.sky/catalogs/v8`. |
 | `EXLS_SKY_CATALOG_FILENAME` | `vms.csv` (string)            | No        | Name of the catalog file. Defaults to `vms.csv`.                      |
 
 ## API
@@ -137,7 +137,7 @@ A multi-stage `Dockerfile` is provided for building a minimal production image.
 
     ```sh
     docker run -d -p 8000:5555 \
-      -v ~/.sky/catalogs/v7:/root/.sky/catalogs/v7 \
+      -v ~/.sky/catalogs/v8:/root/.sky/catalogs/v8 \
       --name skypilot-sidecar-app \
       skypilot-sidecar
     ```

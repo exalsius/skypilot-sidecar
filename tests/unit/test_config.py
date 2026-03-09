@@ -200,7 +200,7 @@ class TestDefaultSkyPath:
 
     def test_default_sky_catalog_path(self):
         """Test that DEFAULT_SKY_CATALOG_PATH is correctly constructed."""
-        expected_path = Path.home() / ".sky" / "catalogs" / "v7"
+        expected_path = Path.home() / ".sky" / "catalogs" / "v8"
         assert DEFAULT_SKY_CATALOG_PATH == expected_path
 
     def test_default_sky_catalog_path_type(self):
