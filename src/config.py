@@ -4,7 +4,7 @@ from pathlib import Path
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-DEFAULT_SKY_CATALOG_PATH: Path = Path.home() / ".sky" / "catalogs" / "v7"
+DEFAULT_SKY_CATALOG_PATH: Path = Path.home() / ".sky" / "catalogs" / "v8"
 
 
 class AppConfig(BaseSettings):
